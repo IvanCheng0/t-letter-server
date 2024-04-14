@@ -28,11 +28,12 @@ func main() {
 	db.AutoMigrate(&model.TodoList{})
 	todoListService := service.TodoList{DB: db,}
 	todoListController := controller.TodoList{TodoList: todoListService}
-
-	r.GET("/list")
-    r.POST("/add")
-	r.POST("/toggle")
-	r.POST("/delete")
+	
+	r.Use(todoListController.Cors)
+	r.GET("/list", todoListController.List)
+    r.POST("/add", todoListController.Add)
+	r.POST("/toggle", todoListController.Toggle)
+	r.POST("/delete", todoListController.Delete)
 
 	r.Run(":3000")
 
